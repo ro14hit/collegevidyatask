@@ -1,45 +1,79 @@
 "use client";
+
+import React from "react";
 import Carousel from "react-material-ui-carousel";
-import { Paper, Typography, Box, CircularProgress, Rating } from "@mui/material";
+import {
+  Paper,
+  Typography,
+  Box,
+  CircularProgress,
+  Rating,
+  Chip,
+} from "@mui/material";
 
+interface CarouselItem {
+  title: string;
+  description: string;
+  fee?: string;
+  emi?: string;
+}
 
-export default function UniversityCarousel({items}) {
-    console.log("Carousel items:", items);
+interface UniversityCarouselProps {
+  items?: CarouselItem[];
+  universityName?: string;
+}
+
+export default function UniversityCarousel({
+  items = [],
+  universityName = "Manipal University",
+}: UniversityCarouselProps) {
   return (
     <Box sx={{ width: "100%", maxWidth: 400, m: "auto" }}>
+      {/* Render dynamic university name */}
       <Typography
         variant="h5"
         align="center"
         sx={{ fontWeight: 600, mb: 2, letterSpacing: 1 }}
       >
-        Manipal University
+        {universityName}
       </Typography>
+
       <Carousel
         indicators={true}
         autoPlay={false}
         swipe={true}
         navButtonsAlwaysVisible={false}
-        sx={{ width: "100%", maxWidth: 400, m: "auto" }}
+        sx={{
+          width: "100%",
+          maxWidth: 400,
+          m: "auto",
+          // height: 260,
+          overflow: "hidden",
+        }}
       >
-        {items?.map((item, idx) => (
+        {items.map((item, idx) => (
           <Paper
             key={idx}
             sx={{
               p: 2,
-              textAlign: "center",
+              textAlign: "left",
               backgroundColor: "#fff",
-              minHeight: 200,
+              height: 260,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
               border: "1px solid #e0e0e0",
+              gap: 2,
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              {item.title}
-            </Typography>
+            <Box sx={{ alignSelf: "flex-start" }}>
+              <Chip
+                label={item.title}
+                color="primary"
+                sx={{ fontWeight: 500, letterSpacing: 0.5, border: "none" }}
+              />
+            </Box>
+
             {idx === 1 ? (
-              // Circular progress bar slide
               <Box
                 sx={{
                   position: "relative",
@@ -68,15 +102,12 @@ export default function UniversityCarousel({items}) {
                     height: "100%",
                   }}
                 >
-                  <Typography
-                    variant="h6"
-                    component="div"
-                    color="text.primary"
-                  >{`90%`}</Typography>
+                  <Typography variant="h6" component="div" color="text.primary">
+                    90%
+                  </Typography>
                 </Box>
               </Box>
             ) : idx === 2 ? (
-              // Star rating slide
               <Box
                 sx={{
                   mt: 2,
@@ -86,25 +117,31 @@ export default function UniversityCarousel({items}) {
                 }}
               >
                 <Rating value={4.3} precision={0.1} readOnly />
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
                   4.3/5 based on 500+ reviews
                 </Typography>
               </Box>
             ) : idx === 3 ? (
-              // Fee details slide
-              <Box sx={{ mt: 2 }}>
+              <Box sx={{ mt: 2, textAlign: "center" }}>
                 <Typography variant="h4" color="primary" gutterBottom>
                   {item.fee}
                 </Typography>
                 <Typography variant="body1" color="text.secondary">
                   {item.description}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
                   {item.emi}
                 </Typography>
               </Box>
             ) : (
-              // Default slide
               <Typography variant="body2" color="text.secondary">
                 {item.description}
               </Typography>
